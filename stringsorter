@@ -1,0 +1,54 @@
+#! /bin/sh
+#opening ascii art, stored in base64 just so its kept alphanumeric, compressed with gzip
+base64 -d <<<"H4sIAAAAAAAAA61QyQ0EMQj7pwoXsBINjUQjFD/YwCT5byJx+AgoAOA8FSs1hipOxnEJLqq9CzBW
+ZuKNDZ7EwDqyENSMGz4B02H6vPniIwm9CnLVRehBKVvW1KkTv71rJg/3y+UGCGxvybpr3d4ipw22
+zEurKRnCw+oXWBtXK16putaN6cL4j38+6wUiONjy7QEAAA==" | gunzip
+#asking for mode (set of functions to run) and prompting for help page
+echo 'which mode do you want to use? (type help for assistance)'
+read MODE
+if [ $MODE = help ]; then
+  base64 -d <<<"H4sIAAAAAAAAA12QW3rEIAiF310FC+imSILKVyOOME27+6LJtDPDE3L5z8FMpcEIaVQVLLNCw0RB
+CfuavXEmpBClg9G3AVdAiFwIsG7QOldTYAtF0kS9rhSunq1SDblyTaCNVo5M20kbDMUvGuK0g8kF
+Dxk1T1yiSh3NJ0bpwiKo9YGTODnhKKw2xnf89BmEQ/o2a7HL7u+p9mf7lGQ7Bf89TeluuMAzq7v3
+RQ7wuu+/Az9gQeUVS/l51j3Y8sMyFqlJeaNwgytud/Z/u+s4wk8HXTs3C+EXLH9cU5MBAAA=" | gunzip
+fi
+if [ $MODE = search ]; then
+  echo file to search through
+  read INFILE
+  echo string to search for
+  read STRING
+  RESULT=`cat $PWD/$INFILE | grep $STRING`
+  clear && echo $RESULT
+fi
+if [ $MODE = log ]; then
+  echo file to search through
+  read INFILE
+  echo string to search for
+  read STRING
+  RESULT=`cat $PWD/$INFILE | grep $STRING`
+  echo what file do you want to save results too?
+  read LOGFILE
+  echo $RESULT > $PWD/$LOGFILE
+fi
+if [ $MODE = wlist ]; then
+  echo source file
+  read SOURCEFILE
+  echo what do you want to name your wordlist
+  read OUTFILE
+  cat $SOURCEFILE > $OUTFILE
+  sed -i s/\\s/\\n/g $OUTFILE
+  OUTFILE2=$OUTFILE.txt
+  cat $OUTFILE | sed -r ‘s/\s+//g’ > $OUTFILE2 && rm $OUTFILE 
+fi
+if [ $MODE = hash ]; then
+  echo string to generate hashes for
+  read STRING
+  MD5=`echo $STRING | md5sum`
+  SHA256=`echo $STRING | sha256sum`
+  echo md5 hash
+  echo $MD5
+  echo sha256 hash
+  echo $SHA256
+fi
+
+
